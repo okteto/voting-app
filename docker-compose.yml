@@ -1,0 +1,20 @@
+services:
+  vote:
+    build: vote
+    ports:
+      - 8080:8080
+    environment:
+      - FLASK_ENV=development
+    command: python app.py
+    volumes:
+      - ./vote:/src
+
+  redis:
+    image: redis
+    ports:
+      - 6379
+    volumes:
+      - redis:/data
+
+volumes:
+  redis:
