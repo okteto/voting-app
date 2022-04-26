@@ -1,20 +1,10 @@
-# Using official python runtime base image
-FROM python:3-slim
+FROM maven:3.8.1-jdk-11
 
-# Set the application directory
-WORKDIR /src
+WORKDIR /app
+COPY . .
+RUN mvn clean package
+RUN cp ./target/*.jar app.jar
 
-RUN pip install --upgrade pip
-
-# Install our requirements.txt
-ADD requirements.txt requirements.txt
-RUN pip install -r requirements.txt
-
-# Copy our code from the current folder to /app inside the container
-ADD . /src
-
-# Make port 8080 available for links and/or publish
 EXPOSE 8080
 
-# Define our command to be run when launching the container
-CMD ["python", "app.py"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
