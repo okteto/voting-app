@@ -1,5 +1,4 @@
 services:
-
   result:
     build:
       context: result
@@ -12,7 +11,6 @@ services:
       - ./result:/app
 
   vote:
-    x-okteto: true
     build:
       context: vote
     command: mvn spring-boot:run
@@ -25,7 +23,6 @@ services:
       - ./vote:/app
 
   worker:
-    x-okteto: true
     build:
       context: worker
     depends_on:
@@ -33,7 +30,6 @@ services:
       - kafka
 
   postgresql:
-    x-okteto: true
     image: docker.io/bitnami/postgresql:14
     environment:
       - POSTGRES_PASSWORD=okteto
@@ -43,11 +39,10 @@ services:
       - 5432:5432
 
   kafka:
-    x-okteto: true
     image: docker.io/bitnami/kafka:3.1
     ports:
-      - 9092:9092
-      - 9093:9093
+      - 9092
+      - 9093
     environment:
       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
@@ -59,7 +54,6 @@ services:
       - zookeeper
 
   zookeeper:
-    x-okteto: true
     image: docker.io/bitnami/zookeeper:3.8
     ports:
       - 2181

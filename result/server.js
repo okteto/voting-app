@@ -24,7 +24,7 @@ io.sockets.on('connection', function (socket) {
 });
 
 var pool = new pg.Pool({
-  connectionString: 'postgres://okteto:okteto@host.docker.internal/votes'
+  connectionString: 'postgres://okteto:okteto@postgresql/votes'
 });
 
 async.retry(
