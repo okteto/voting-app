@@ -8,9 +8,9 @@ var express = require('express'),
     methodOverride = require('method-override'),
     app = express(),
     server = require('http').Server(app),
-    io = require('socket.io')(server);
-
-io.set('transports', ['polling']);
+    io = require('socket.io')(server, {
+      transports: ['polling', 'websocket']
+    });
 
 var port = process.env.PORT || 4000;
 
@@ -70,7 +70,8 @@ function collectVotesFromResult(result) {
 }
 
 app.use(cookieParser());
-app.use(bodyParser());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");

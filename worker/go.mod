@@ -1,10 +1,10 @@
-module github.com/okteto/microservicees-demo/worker
+module github.com/okteto/microservices-demo/worker
 
-go 1.18
+go 1.22
 
 require (
-	github.com/Shopify/sarama v1.30.0
-	github.com/lib/pq v1.10.4
+	github.com/IBM/sarama v1.43.2
+	github.com/lib/pq v1.10.9
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 )
 

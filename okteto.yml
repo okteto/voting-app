@@ -1,0 +1,21 @@
+build:
+  vote:
+    context: vote
+    dockerfile: Dockerfile
+  result:
+    context: result
+    dockerfile: Dockerfile
+  worker:
+    context: worker
+    dockerfile: Dockerfile
+
+deploy:
+  compose:
+    file: docker-compose.yml
+  
+test:
+  unit:
+    image: okteto/golang:1
+    context: worker
+    commands:
+      - cd worker && go test ./...

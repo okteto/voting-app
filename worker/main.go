@@ -12,7 +12,7 @@ import (
 
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
 
-	"github.com/Shopify/sarama"
+	"github.com/IBM/sarama"
 )
 
 var (

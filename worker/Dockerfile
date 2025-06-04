@@ -1,23 +1,24 @@
-FROM golang:buster as dev
+FROM golang:1.22-alpine AS dev
+
+RUN apk add --no-cache git bash curl
 
 COPY bashrc /root/.bashrc
 
 WORKDIR /app
 
-RUN go install github.com/codegangsta/gin@latest && \
-    go install github.com/go-delve/delve/cmd/dlv@latest && \
-    go install golang.org/x/tools/gopls@latest && \
-    curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b /usr/bin
+RUN go install github.com/air-verse/air@v1.52.3 && \
+    go install github.com/go-delve/delve/cmd/dlv@v1.22.1 && \
+    go install golang.org/x/tools/gopls@v0.15.3
 
-ADD go.mod go.sum ./
-RUN go mod download all
+COPY . .
 
-ADD . .
-RUN go get
+RUN go mod tidy && go mod download
 
-RUN --mount=type=cache,target=/root/.cache/go-build CGO_ENABLED=0 GOOS=linux go build -v -o /usr/local/bin/worker main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -v -o /usr/local/bin/worker main.go
 
-FROM scratch
+FROM alpine:3.19
+
+RUN apk add --no-cache ca-certificates
 
 COPY --from=dev /usr/local/bin/worker /usr/local/bin/worker
 
