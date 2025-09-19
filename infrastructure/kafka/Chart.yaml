@@ -1,0 +1,5 @@
+apiVersion: v2
+name: kafka
+description: Apache Kafka message broker
+version: 0.1.0
+appVersion: "3.1"

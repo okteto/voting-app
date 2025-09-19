@@ -1,0 +1,30 @@
+image:
+  repository: confluentinc/cp-kafka
+  tag: "7.4.0"
+  pullPolicy: IfNotPresent
+
+zookeeper:
+  service: zookeeper
+
+service:
+  type: ClusterIP
+  port: 9092
+  externalPort: 9093
+
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "500m"
+  limits:
+    memory: "1Gi"
+    cpu: "1000m"
+
+persistence:
+  enabled: true
+  size: 8Gi
+  storageClass: ""
+
+config:
+  replicationFactor: 1
+  numPartitions: 3
+  logRetentionHours: 168
