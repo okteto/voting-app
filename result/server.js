@@ -4,17 +4,17 @@ var express = require('express'),
     { Pool } = require('pg'),
     path = require('path'),
     cookieParser = require('cookie-parser'),
-    bodyParser = require('body-parser'),
     methodOverride = require('method-override'),
     app = express(),
     server = require('http').Server(app),
-    io = require('socket.io')(server);
-
-io.set('transports', ['polling']);
+    { Server } = require('socket.io'),
+    io = new Server(server, {
+      transports: ['polling']
+    });
 
 var port = process.env.PORT || 4000;
 
-io.sockets.on('connection', function (socket) {
+io.on('connection', function (socket) {
 
   socket.emit('message', { text : 'Welcome!' });
 
@@ -52,7 +52,7 @@ function getVotes(client) {
       console.error("Error performing query: " + err);
     } else {
       var votes = collectVotesFromResult(result);
-      io.sockets.emit("scores", JSON.stringify(votes));
+      io.emit("scores", JSON.stringify(votes));
     }
 
     setTimeout(function() {getVotes(client) }, 1000);
@@ -70,7 +70,8 @@ function collectVotesFromResult(result) {
 }
 
 app.use(cookieParser());
-app.use(bodyParser());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
